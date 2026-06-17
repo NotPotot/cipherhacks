@@ -1,11 +1,11 @@
-import { createCipherHacksMiddleware } from 'cipherhacks-shield/nextjs'
+import { createMirageMiddleware } from 'mirage-shield/nextjs'
 
-export const middleware = createCipherHacksMiddleware({
+export const middleware = createMirageMiddleware({
   routes: {
     '/checkout*': 'maximum',
     '/api/checkout*': 'maximum',
     '/api/products*': 'high',
-    '/api/cipherhacks/report*': 'high',
+    '/api/mirage/report*': 'high',
     '/*': 'standard',
   },
   onDetection: 'block',
@@ -15,10 +15,10 @@ export const middleware = createCipherHacksMiddleware({
     maxRequests: 30,
     aiPatternMultiplier: 0.5,
   },
-  eventsUrl: '/api/cipherhacks/events',
+  eventsUrl: '/api/mirage/events',
   debug: true,
 })
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|products/|admin|api/cipherhacks/events|blocked|.*\\.png$|.*\\.svg$|.*\\.jpg$).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|products/|admin|api/mirage/events|blocked|.*\\.png$|.*\\.svg$|.*\\.jpg$).*)'],
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useShieldStatus } from 'cipherhacks-shield/react';
+import { useShieldStatus } from 'mirage-shield/react';
 
 export function ShieldStatus() {
   const status = useShieldStatus();
@@ -18,7 +18,7 @@ export function ShieldStatus() {
       <button
         onClick={() => setExpanded(!expanded)}
         className={`${statusColor} text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:scale-110 transition-transform`}
-        title="CipherHacks Shield Status"
+        title="Mirage Shield Status"
       >
         🛡️
       </button>
@@ -26,7 +26,7 @@ export function ShieldStatus() {
       {expanded && (
         <div className="absolute bottom-14 right-0 bg-white rounded-lg shadow-xl border border-gray-200 p-4 w-72">
           <h3 className="font-bold text-gray-900 text-sm mb-3 flex items-center gap-2">
-            🛡️ CipherHacks Shield
+            🛡️ Mirage Shield
           </h3>
 
           <div className="space-y-2 text-sm">

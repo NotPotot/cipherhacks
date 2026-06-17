@@ -83,7 +83,7 @@ export function CheckoutForm() {
           Payment Information
         </h3>
         <p className="text-xs text-green-600 font-medium mb-4">
-          🛡️ These fields are protected by CipherHacks DOM Shield — values are
+          🛡️ These fields are protected by Mirage DOM Shield — values are
           obfuscated in the DOM
         </p>
         <div>

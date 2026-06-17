@@ -39,7 +39,7 @@ interface ProviderProps extends Partial<ClientConfig> {
   reportEndpoint?: string;
 }
 
-export function CipherHacksProvider({
+export function MirageProvider({
   children,
   reportEndpoint,
   protectSelectors = DEFAULT_CLIENT_CONFIG.protectSelectors,
@@ -118,7 +118,7 @@ export function CipherHacksProvider({
 }
 
 function report(endpoint: string | undefined, data: unknown) {
-  const url = endpoint || '/api/cipherhacks/report';
+  const url = endpoint || '/api/mirage/report';
   fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

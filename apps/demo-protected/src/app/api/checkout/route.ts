@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-  const score = request.headers.get('X-CipherHacks-Score');
+  const score = request.headers.get('X-Mirage-Score');
   if (score && parseInt(score) >= 70) {
     return NextResponse.json(
-      { error: 'Request blocked by CipherHacks' },
+      { error: 'Request blocked by Mirage' },
       { status: 403 }
     );
   }

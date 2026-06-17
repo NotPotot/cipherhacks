@@ -14,7 +14,7 @@ export default function BlockedPage() {
         </h1>
 
         <p className="mt-3 leading-relaxed text-muted-foreground">
-          CipherHacks has detected automated or suspicious activity from your
+          Mirage has detected automated or suspicious activity from your
           session. This request has been blocked to protect sensitive data.
         </p>
 

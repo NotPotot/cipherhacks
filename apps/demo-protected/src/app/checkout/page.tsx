@@ -25,7 +25,7 @@ export default function CheckoutPage() {
     <div className="max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-2">Checkout</h1>
       <p className="text-green-600 text-sm font-medium mb-6">
-        🛡️ This page is protected by CipherHacks — credit card data is
+        🛡️ This page is protected by Mirage — credit card data is
         obfuscated in the DOM, honeypots are active, and bot detection is running
       </p>
       <div className="bg-white rounded-lg border border-green-200 p-6">

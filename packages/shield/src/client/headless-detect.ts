@@ -73,9 +73,9 @@ function checkCanvasAnomaly(): boolean {
     ctx.fillStyle = '#f60';
     ctx.fillRect(125, 1, 62, 20);
     ctx.fillStyle = '#069';
-    ctx.fillText('CipherHacks', 2, 15);
+    ctx.fillText('Mirage', 2, 15);
     ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-    ctx.fillText('CipherHacks', 4, 17);
+    ctx.fillText('Mirage', 4, 17);
 
     const dataUrl = canvas.toDataURL();
     // Extremely short data URLs suggest a blank or uniform canvas (headless anomaly)

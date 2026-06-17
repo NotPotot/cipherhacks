@@ -5,7 +5,7 @@ export interface Logger {
 }
 
 export function createLogger(debug: boolean): Logger {
-  const prefix = '[CipherHacks]';
+  const prefix = '[Mirage]';
   return {
     debug: debug
       ? (msg, data) => console.log(`${prefix} ${msg}`, data ?? '')

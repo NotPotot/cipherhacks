@@ -7,7 +7,7 @@ export default function BlockedPage() {
           Access Blocked
         </h1>
         <p className="text-gray-600 mb-6">
-          CipherHacks has detected automated or suspicious activity from your
+          Mirage has detected automated or suspicious activity from your
           session. This request has been blocked to protect sensitive data.
         </p>
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">

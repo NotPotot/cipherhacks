@@ -4,13 +4,13 @@ import { generateCSPHeader } from '../csp';
 import { createLogger } from '../../shared/logger';
 import type { ShieldConfig, SensitivityLevel, RequestInfo } from '../../types';
 
-export function createCipherHacksMiddleware(
+export function createMirageMiddleware(
   userConfig: Partial<ShieldConfig> = {}
 ) {
   const config = mergeConfig(userConfig);
   const logger = createLogger(config.debug);
 
-  return async function cipherHacksMiddleware(request: Request) {
+  return async function mirageMiddleware(request: Request) {
     const { NextResponse } = await import('next/server');
     const url = new URL(request.url);
     const pathname = url.pathname;
@@ -68,7 +68,7 @@ export function createCipherHacksMiddleware(
       logger.threat(`Challenged/blocked: ${requestInfo.ip} (score: ${assessment.score})`, assessment);
       return new NextResponse(
         '<!DOCTYPE html><html><body><h1>Access Denied</h1><p>Suspicious activity detected.</p></body></html>',
-        { status: 403, headers: { 'Content-Type': 'text/html', 'X-CipherHacks-Score': String(assessment.score) } }
+        { status: 403, headers: { 'Content-Type': 'text/html', 'X-Mirage-Score': String(assessment.score) } }
       );
     }
 
@@ -79,7 +79,7 @@ export function createCipherHacksMiddleware(
       );
       return new NextResponse('Too Many Requests', {
         status: 429,
-        headers: { 'X-CipherHacks-Slowdown': String(slowdownMs), 'Retry-After': String(Math.ceil(slowdownMs / 1000)) },
+        headers: { 'X-Mirage-Slowdown': String(slowdownMs), 'Retry-After': String(Math.ceil(slowdownMs / 1000)) },
       });
     }
 
@@ -97,9 +97,9 @@ export function createCipherHacksMiddleware(
       'Content-Security-Policy',
       generateCSPHeader(sensitivity)
     );
-    response.headers.set('X-CipherHacks-RequestId', assessment.requestId);
+    response.headers.set('X-Mirage-RequestId', assessment.requestId);
     response.headers.set(
-      'X-CipherHacks-Score',
+      'X-Mirage-Score',
       String(assessment.score)
     );
     response.headers.set('X-Content-Type-Options', 'nosniff');
@@ -107,11 +107,11 @@ export function createCipherHacksMiddleware(
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
     if (assessment.action === 'challenge') {
-      response.headers.set('X-CipherHacks-Challenge', 'required');
+      response.headers.set('X-Mirage-Challenge', 'required');
     }
 
     if (slowdownMs > 0) {
-      response.headers.set('X-CipherHacks-Slowdown', String(slowdownMs));
+      response.headers.set('X-Mirage-Slowdown', String(slowdownMs));
     }
 
     return response;

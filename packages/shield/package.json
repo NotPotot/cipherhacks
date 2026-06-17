@@ -1,5 +1,5 @@
 {
-  "name": "cipherhacks-shield",
+  "name": "mirage-shield",
   "version": "0.1.1",
   "description": "AI breach defense package — protect any website from AI-driven attacks",
   "main": "./dist/index.js",
@@ -53,7 +53,7 @@
     "@types/express": "^5.0.0"
   },
   "bin": {
-    "cipherhacks": "./bin/init.mjs"
+    "mirage": "./bin/init.mjs"
   },
   "files": ["dist", "bin"],
   "license": "MIT"

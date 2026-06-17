@@ -1,6 +1,6 @@
-import { createCipherHacksMiddleware } from 'cipherhacks-shield/nextjs';
+import { createMirageMiddleware } from 'mirage-shield/nextjs';
 
-export const middleware = createCipherHacksMiddleware({
+export const middleware = createMirageMiddleware({
   routes: {
     '/checkout*': 'maximum',
     '/api/checkout*': 'maximum',

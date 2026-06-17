@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Shield, ShieldCheck, ShieldAlert } from 'lucide-react'
-import { useShieldStatus } from 'cipherhacks-shield/react'
+import { useShieldStatus } from 'mirage-shield/react'
 
 export function ShieldStatusWidget() {
   const status = useShieldStatus()
@@ -25,7 +25,7 @@ export function ShieldStatusWidget() {
       <button
         onClick={() => setExpanded(!expanded)}
         className={`${bgColor} flex size-12 items-center justify-center rounded-full text-white shadow-lg transition-transform hover:scale-110`}
-        title="CipherHacks Shield Status"
+        title="Mirage Shield Status"
       >
         <Icon className="size-5" />
       </button>
@@ -34,7 +34,7 @@ export function ShieldStatusWidget() {
         <div className="absolute bottom-14 right-0 w-72 rounded-2xl border border-border bg-card p-4 shadow-xl">
           <h3 className="flex items-center gap-2 text-sm font-semibold">
             <ShieldCheck className="size-4 text-emerald-600" />
-            CipherHacks Shield
+            Mirage Shield
           </h3>
 
           <div className="mt-3 space-y-2 text-sm">

@@ -22,14 +22,14 @@ type Res = {
 
 type NextFn = (err?: unknown) => void;
 
-export function cipherHacksExpress(
+export function mirageExpress(
   userConfig: Partial<ShieldConfig> & { sensitivity?: SensitivityLevel } = {}
 ) {
   const config = mergeConfig(userConfig);
   const logger = createLogger(config.debug);
   const defaultSensitivity = userConfig.sensitivity || 'standard';
 
-  return function cipherHacksMiddleware(req: Req, res: Res, next: NextFn) {
+  return function mirageMiddleware(req: Req, res: Res, next: NextFn) {
     const requestInfo = extractRequestInfo(req);
     const sensitivity = matchRoute(req.url, config.routes) || defaultSensitivity;
 
@@ -65,14 +65,14 @@ export function cipherHacksExpress(
     }
 
     res.setHeader('Content-Security-Policy', generateCSPHeader(sensitivity));
-    res.setHeader('X-CipherHacks-RequestId', assessment.requestId);
-    res.setHeader('X-CipherHacks-Score', String(assessment.score));
+    res.setHeader('X-Mirage-RequestId', assessment.requestId);
+    res.setHeader('X-Mirage-Score', String(assessment.score));
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
     if (assessment.action === 'challenge') {
-      res.setHeader('X-CipherHacks-Challenge', 'required');
+      res.setHeader('X-Mirage-Challenge', 'required');
     }
 
     if (slowdownMs > 0) {
@@ -80,7 +80,7 @@ export function cipherHacksExpress(
         `Slowing down ${requestInfo.ip} by ${slowdownMs}ms — repeated request pattern`,
         { score: assessment.score }
       );
-      res.setHeader('X-CipherHacks-Slowdown', String(slowdownMs));
+      res.setHeader('X-Mirage-Slowdown', String(slowdownMs));
       setTimeout(() => next(), slowdownMs);
       return;
     }

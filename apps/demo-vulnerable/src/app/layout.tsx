@@ -5,7 +5,7 @@ import { CartProvider } from '@/lib/cart';
 
 export const metadata: Metadata = {
   title: 'TechShop — Vulnerable Demo',
-  description: 'Unprotected e-commerce demo for CipherHacks',
+  description: 'Unprotected e-commerce demo for Mirage',
 };
 
 export default function RootLayout({

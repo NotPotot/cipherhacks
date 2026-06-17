@@ -87,8 +87,8 @@ export function checkHoneypots(): { triggered: boolean; field: string | null } {
 function reportHoneypotTrigger(fieldName: string) {
   const endpoint =
     document
-      .querySelector('meta[name="cipherhacks-report"]')
-      ?.getAttribute('content') || '/api/cipherhacks/report';
+      .querySelector('meta[name="mirage-report"]')
+      ?.getAttribute('content') || '/api/mirage/report';
 
   fetch(endpoint, {
     method: 'POST',

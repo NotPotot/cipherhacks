@@ -1,5 +1,5 @@
 {
-  "name": "cipherhacks",
+  "name": "mirage",
   "private": true,
   "workspaces": [
     "packages/*",

@@ -5,8 +5,8 @@ import { CartProvider } from '@/lib/cart';
 import { ShieldWrapper } from '@/components/ShieldWrapper';
 
 export const metadata: Metadata = {
-  title: 'TechShop — Protected by CipherHacks',
-  description: 'CipherHacks-protected e-commerce demo',
+  title: 'TechShop — Protected by Mirage',
+  description: 'Mirage-protected e-commerce demo',
 };
 
 export default function RootLayout({

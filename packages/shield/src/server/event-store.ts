@@ -32,7 +32,7 @@ interface EventStore {
 }
 
 const MAX_EVENTS = 500;
-const GLOBAL_KEY = '__cipherhacks_event_store__';
+const GLOBAL_KEY = '__mirage_event_store__';
 
 function getStore(): EventStore {
   const g = globalThis as any;

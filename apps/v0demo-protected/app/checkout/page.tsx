@@ -252,14 +252,14 @@ export default function CheckoutPage() {
                       Payment
                     </h2>
                     <span className="flex items-center gap-1 text-xs text-emerald-600">
-                      <ShieldCheck className="size-3.5" /> CipherHacks Protected
+                      <ShieldCheck className="size-3.5" /> Mirage Protected
                     </span>
                   </div>
 
                   <div className="mt-4 flex items-start gap-2 rounded-xl border border-emerald-300 bg-emerald-50 p-3 text-sm text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-400">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0" />
                     <p>
-                      These fields are protected by CipherHacks DOM Shield —
+                      These fields are protected by Mirage DOM Shield —
                       values are obfuscated in the DOM and invisible to scrapers.
                     </p>
                   </div>

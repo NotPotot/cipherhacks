@@ -1,13 +1,13 @@
 'use client'
 
-import { CipherHacksProvider } from 'cipherhacks-shield/react'
+import { MirageProvider } from 'mirage-shield/react'
 import { ShieldStatusWidget } from './shield-status'
 import type { ReactNode } from 'react'
 
 export function ShieldWrapper({ children }: { children: ReactNode }) {
   return (
-    <CipherHacksProvider
-      reportEndpoint="/api/cipherhacks/report"
+    <MirageProvider
+      reportEndpoint="/api/mirage/report"
       protectSelectors={[
         '[data-sensitive]',
         'input[name="cardNumber"]',
@@ -19,6 +19,6 @@ export function ShieldWrapper({ children }: { children: ReactNode }) {
     >
       {children}
       <ShieldStatusWidget />
-    </CipherHacksProvider>
+    </MirageProvider>
   )
 }

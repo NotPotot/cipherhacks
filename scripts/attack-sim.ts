@@ -102,7 +102,7 @@ async function recon(baseUrl: string): Promise<SiteRecon> {
     }
 
     const commonApis = ['/api', '/api/products', '/api/checkout', '/api/users', '/api/auth',
-      '/api/login', '/api/cipherhacks/report', '/api/contact', '/api/search', '/api/data']
+      '/api/login', '/api/mirage/report', '/api/contact', '/api/search', '/api/data']
     for (const endpoint of commonApis) {
       try {
         const res = await page.request.get(`${baseUrl}${endpoint}`, { timeout: 2000 })
@@ -150,9 +150,9 @@ async function attackBotScrape(baseUrl: string, targetPage: string): Promise<Att
       headers: { 'User-Agent': 'GPTBot/1.0 (+https://openai.com/gptbot)' },
       redirect: 'manual',
     })
-    const score = res.headers.get('x-cipherhacks-score') || '?'
+    const score = res.headers.get('x-mirage-score') || '?'
     const location = res.headers.get('location') || ''
-    log(`HTTP ${res.status} | X-CipherHacks-Score: ${score}`)
+    log(`HTTP ${res.status} | X-Mirage-Score: ${score}`)
 
     if (res.status === 307 || res.status === 308 || location.includes('blocked')) {
       log(`Location: ${location}`)
@@ -393,8 +393,8 @@ async function attackPromptInjection(baseUrl: string, targetPage: string, apiEnd
     })
 
     const location = res.headers.get('location') || ''
-    const score = res.headers.get('x-cipherhacks-score') || '0'
-    log(`HTTP ${res.status} | X-CipherHacks-Score: ${score}`)
+    const score = res.headers.get('x-mirage-score') || '0'
+    log(`HTTP ${res.status} | X-Mirage-Score: ${score}`)
 
     if (res.status === 307 || res.status === 308 || location.includes('blocked')) {
       return { name: 'Payload Injection', status: 'blocked', detail: `Blocked — structured prompt detected (score: ${score})` }
@@ -475,13 +475,13 @@ function prompt(question: string): Promise<string> {
 
 async function main() {
   console.log(`\n${BOLD}╔${'═'.repeat(58)}╗${RESET}`)
-  console.log(`${BOLD}║${RESET}          ${CYAN}${BOLD}CipherHacks Attack Simulation${RESET}                  ${BOLD}║${RESET}`)
+  console.log(`${BOLD}║${RESET}          ${CYAN}${BOLD}Mirage Attack Simulation${RESET}                  ${BOLD}║${RESET}`)
   console.log(`${BOLD}╚${'═'.repeat(58)}╝${RESET}`)
 
   const target = process.argv[2]
   if (target === '--target' && process.argv[3]) {
     if (process.argv[3] === 'vulnerable') { await runSuite('VULNERABLE — No Shield', VULNERABLE); return }
-    if (process.argv[3] === 'protected') { await runSuite('PROTECTED — CipherHacks Shield', PROTECTED); return }
+    if (process.argv[3] === 'protected') { await runSuite('PROTECTED — Mirage Shield', PROTECTED); return }
   }
 
   console.log(`
@@ -500,7 +500,7 @@ async function main() {
       await runSuite('VULNERABLE — No Shield', VULNERABLE)
       break
     case '2':
-      await runSuite('PROTECTED — CipherHacks Shield', PROTECTED)
+      await runSuite('PROTECTED — Mirage Shield', PROTECTED)
       break
     case '3': {
       const url = await prompt(`  ${BOLD}Enter target URL${RESET} ${DIM}(e.g. http://localhost:3000):${RESET} `)
@@ -512,12 +512,12 @@ async function main() {
     case '4': {
       const vulnResults = await runSuite('VULNERABLE — No Shield', VULNERABLE)
       await sleep(1000)
-      const protResults = await runSuite('PROTECTED — CipherHacks Shield', PROTECTED)
+      const protResults = await runSuite('PROTECTED — Mirage Shield', PROTECTED)
       const vulnExposed = vulnResults.filter((r) => r.status === 'exposed').length
       const protBlocked = protResults.filter((r) => r.status === 'blocked').length
       const protSafe = protResults.filter((r) => r.status === 'safe').length
       console.log(`\n${BOLD}${'═'.repeat(62)}${RESET}`)
-      console.log(`  ${BOLD}Summary:${RESET} CipherHacks blocked ${GREEN}${BOLD}${protBlocked}/${protResults.length}${RESET} attack vectors.`)
+      console.log(`  ${BOLD}Summary:${RESET} Mirage blocked ${GREEN}${BOLD}${protBlocked}/${protResults.length}${RESET} attack vectors.`)
       if (protSafe > 0) console.log(`  ${DIM}${protSafe} test(s) found no attack surface — site is clean.${RESET}`)
       console.log(`  ${DIM}Vulnerable site exposed to ${vulnExposed}/${vulnResults.length} attacks.${RESET}`)
       console.log(`${BOLD}${'═'.repeat(62)}${RESET}\n`)

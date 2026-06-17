@@ -58,7 +58,7 @@ export default function AdminPage() {
               Admin Dashboard
             </h1>
             <p className="text-xs text-muted-foreground">
-              CipherHacks protected — internal view
+              Mirage protected — internal view
             </p>
           </div>
           <Link
@@ -102,8 +102,8 @@ function SecurityTab() {
   const poll = useCallback(async () => {
     try {
       const url = lastFetch
-        ? `/api/cipherhacks/events?since=${lastFetch}`
-        : '/api/cipherhacks/events'
+        ? `/api/mirage/events?since=${lastFetch}`
+        : '/api/mirage/events'
       const res = await fetch(url)
       const data = await res.json()
       if (data.events?.length > 0) {

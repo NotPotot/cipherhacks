@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Nimbus Tech — Protected by CipherHacks',
+  title: 'Nimbus Tech — Protected by Mirage',
   description:
-    'CipherHacks-protected demonstration e-commerce store. AI breach defense active.',
+    'Mirage-protected demonstration e-commerce store. AI breach defense active.',
   generator: 'v0.app',
   icons: {
     icon: [

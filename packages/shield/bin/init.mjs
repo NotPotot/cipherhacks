@@ -22,7 +22,7 @@ function fail(msg) { console.error(`\n${RED}✗ ${msg}${RESET}`); process.exit(1
 
 console.log(`
 ${BOLD}╔════════════════════════════════════════════════╗${RESET}
-${BOLD}║${RESET}  ${CYAN}${BOLD}cipherhacks-shield${RESET} — Install & Configure   ${BOLD}║${RESET}
+${BOLD}║${RESET}  ${CYAN}${BOLD}mirage-shield${RESET} — Install & Configure   ${BOLD}║${RESET}
 ${BOLD}╚════════════════════════════════════════════════╝${RESET}
 `)
 
@@ -58,9 +58,9 @@ log(`${DIM}Framework: ${framework}${RESET}`)
 
 // ─── Step 1: Check package is installed ───
 
-step(1, 'Checking cipherhacks-shield...')
+step(1, 'Checking mirage-shield...')
 
-const hasShield = deps['cipherhacks-shield']
+const hasShield = deps['mirage-shield']
 if (hasShield) {
   done('Already installed')
 } else {
@@ -69,7 +69,7 @@ if (hasShield) {
     : 'npm'
 
   const legacyFlag = pm === 'npm' ? ' --legacy-peer-deps' : ''
-  const installCmd = pm === 'yarn' ? 'yarn add cipherhacks-shield' : `${pm} install cipherhacks-shield${legacyFlag}`
+  const installCmd = pm === 'yarn' ? 'yarn add mirage-shield' : `${pm} install mirage-shield${legacyFlag}`
   log(`${DIM}$ ${installCmd}${RESET}`)
 
   try {
@@ -89,11 +89,11 @@ if (isNext) {
   const middlewarePath = join(cwd, srcDir, 'middleware.ts')
 
   if (existsSync(middlewarePath)) {
-    warn(`middleware.ts already exists — skipping (add CipherHacks manually)`)
+    warn(`middleware.ts already exists — skipping (add Mirage manually)`)
   } else {
-    const content = `import { createCipherHacksMiddleware } from 'cipherhacks-shield/nextjs'
+    const content = `import { createMirageMiddleware } from 'mirage-shield/nextjs'
 
-export const middleware = createCipherHacksMiddleware({
+export const middleware = createMirageMiddleware({
   onDetection: 'block',
   blockPage: '/blocked',
 })
@@ -130,7 +130,7 @@ export const config = {
   step(4, 'Creating security events API...')
 
   if (appDir) {
-    const eventsDir = join(appDir, 'api', 'cipherhacks', 'events')
+    const eventsDir = join(appDir, 'api', 'mirage', 'events')
     const eventsPath = join(eventsDir, 'route.ts')
 
     if (existsSync(eventsPath)) {
@@ -138,7 +138,7 @@ export const config = {
     } else {
       mkdirSync(eventsDir, { recursive: true })
       const eventsRoute = `import { NextResponse } from 'next/server'
-import { addEvent, getEvents, getEventsSince, getStats } from 'cipherhacks-shield'
+import { addEvent, getEvents, getEventsSince, getStats } from 'mirage-shield'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -158,7 +158,7 @@ export async function POST(request: Request) {
 }
 `
       writeFileSync(eventsPath, eventsRoute)
-      done('Created api/cipherhacks/events/route.ts')
+      done('Created api/mirage/events/route.ts')
     }
   }
 }
@@ -166,33 +166,33 @@ export async function POST(request: Request) {
 // ─── React (CRA / Vite / plain React) setup ───
 
 if (!isNext && hasReact) {
-  step(2, 'Creating CipherHacks wrapper component...')
+  step(2, 'Creating Mirage wrapper component...')
 
   const srcDir = existsSync(join(cwd, 'src')) ? join(cwd, 'src') : cwd
   const componentsDir = join(srcDir, 'components')
   mkdirSync(componentsDir, { recursive: true })
 
-  const wrapperPath = join(componentsDir, 'CipherHacksShield.tsx')
+  const wrapperPath = join(componentsDir, 'MirageShield.tsx')
   if (existsSync(wrapperPath)) {
-    warn('CipherHacksShield.tsx already exists — skipping')
+    warn('MirageShield.tsx already exists — skipping')
   } else {
-    const wrapper = `import { CipherHacksProvider } from 'cipherhacks-shield/react'
+    const wrapper = `import { MirageProvider } from 'mirage-shield/react'
 import type { ReactNode } from 'react'
 
-export function CipherHacksShield({ children }: { children: ReactNode }) {
+export function MirageShield({ children }: { children: ReactNode }) {
   return (
-    <CipherHacksProvider
+    <MirageProvider
       protectSelectors={['[data-sensitive]', 'input[type="password"]', 'input[name*="card"]', 'input[name*="cvv"]']}
       honeypotFields={true}
       behaviorTracking={true}
     >
       {children}
-    </CipherHacksProvider>
+    </MirageProvider>
   )
 }
 `
     writeFileSync(wrapperPath, wrapper)
-    done('Created src/components/CipherHacksShield.tsx')
+    done('Created src/components/MirageShield.tsx')
   }
 
   step(3, 'Finding your app entry point...')
@@ -203,10 +203,10 @@ export function CipherHacksShield({ children }: { children: ReactNode }) {
   if (appFile) {
     const appContent = readFileSync(appFile, 'utf-8')
 
-    if (appContent.includes('CipherHacksShield')) {
-      warn('CipherHacksShield already imported in App — skipping')
+    if (appContent.includes('MirageShield')) {
+      warn('MirageShield already imported in App — skipping')
     } else {
-      const importLine = `import { CipherHacksShield } from './components/CipherHacksShield'\n`
+      const importLine = `import { MirageShield } from './components/MirageShield'\n`
 
       let updated = appContent
 
@@ -219,7 +219,7 @@ export function CipherHacksShield({ children }: { children: ReactNode }) {
         updated = importLine + updated
       }
 
-      // Wrap the return JSX with <CipherHacksShield>
+      // Wrap the return JSX with <MirageShield>
       const returnMatch = updated.match(/return\s*\(\s*\n?/)
       if (returnMatch && returnMatch.index !== undefined) {
         const insertPos = returnMatch.index + returnMatch[0].length
@@ -238,25 +238,25 @@ export function CipherHacksShield({ children }: { children: ReactNode }) {
         const afterClose = restAfterReturn.slice(closeIdx)
 
         updated = updated.slice(0, insertPos) +
-          `<CipherHacksShield>\n` +
+          `<MirageShield>\n` +
           jsxContent +
-          `\n</CipherHacksShield>` +
+          `\n</MirageShield>` +
           afterClose
       }
 
       writeFileSync(appFile, updated)
-      done(`Wrapped App with <CipherHacksShield> in ${appFile.split('/').pop()}`)
+      done(`Wrapped App with <MirageShield> in ${appFile.split('/').pop()}`)
     }
   } else {
     warn('Could not find App.tsx/App.jsx — wrap your root component manually:')
     console.log(`
-  ${CYAN}import { CipherHacksShield } from './components/CipherHacksShield'
+  ${CYAN}import { MirageShield } from './components/MirageShield'
 
   function App() {
     return (
-      <CipherHacksShield>
+      <MirageShield>
         {/* your existing app */}
-      </CipherHacksShield>
+      </MirageShield>
     )
   }${RESET}
 `)
@@ -277,8 +277,8 @@ export function CipherHacksShield({ children }: { children: ReactNode }) {
 if (isExpress) {
   step(isNext ? 5 : 3, 'Express detected — add this to your server file:')
   console.log(`
-  ${CYAN}const { cipherHacksExpress } = require('cipherhacks-shield/express')
-  app.use(cipherHacksExpress({ onDetection: 'block' }))${RESET}
+  ${CYAN}const { mirageExpress } = require('mirage-shield/express')
+  app.use(mirageExpress({ onDetection: 'block' }))${RESET}
 `)
 }
 
@@ -286,13 +286,13 @@ if (isHono && !isNext) {
   step(5, 'Hono backend detected — add middleware to your Hono server:')
   console.log(`
   ${CYAN}// In your Hono server file:
-  import { cipherHacksExpress } from 'cipherhacks-shield/express'
+  import { mirageExpress } from 'mirage-shield/express'
 
   // Hono can use Express-style middleware via adapter,
   // or check requests manually:
   app.use('*', async (c, next) => {
     const ua = c.req.header('user-agent') || ''
-    // cipherhacks-shield scoring runs on the client side
+    // mirage-shield scoring runs on the client side
     // for React apps. Server-side protection requires
     // Next.js or Express middleware.
     await next()
@@ -304,7 +304,7 @@ if (isHono && !isNext) {
 
 console.log(`
 ${BOLD}${GREEN}════════════════════════════════════════════════${RESET}
-${BOLD}${GREEN}  CipherHacks Shield is installed and active!   ${RESET}
+${BOLD}${GREEN}  Mirage Shield is installed and active!   ${RESET}
 ${BOLD}${GREEN}════════════════════════════════════════════════${RESET}
 
   ${DIM}Start your dev server and visit your site.
@@ -312,13 +312,13 @@ ${BOLD}${GREEN}═════════════════════�
   will be detected and blocked automatically.${RESET}
 ${isNext ? `
   ${BOLD}Blocked page:${RESET}    /blocked
-  ${BOLD}Events API:${RESET}      /api/cipherhacks/events
+  ${BOLD}Events API:${RESET}      /api/mirage/events
 ` : `
   ${BOLD}Protected:${RESET}       All [data-sensitive] inputs
   ${BOLD}Honeypots:${RESET}       Auto-injected into forms
   ${BOLD}Bot detection:${RESET}   Headless browser + typing analysis
 `}
-  ${DIM}Docs: https://github.com/cipherhacks${RESET}
+  ${DIM}Docs: https://github.com/mirage${RESET}
 `)
 
 function blockedPageContent() {
@@ -329,7 +329,7 @@ function blockedPageContent() {
         <div style={{ fontSize: 64, marginBottom: 16 }}>🛡️</div>
         <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>Access Blocked</h1>
         <p style={{ color: '#666', lineHeight: 1.6 }}>
-          CipherHacks has detected automated or suspicious activity from your
+          Mirage has detected automated or suspicious activity from your
           session. This request has been blocked to protect sensitive data.
         </p>
       </div>

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { addEvent, getEvents, getEventsSince, getStats } from 'cipherhacks-shield'
+import { addEvent, getEvents, getEventsSince, getStats } from 'mirage-shield'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)

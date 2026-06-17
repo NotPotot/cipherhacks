@@ -27,6 +27,6 @@ export default defineConfig([
     format: ['iife'],
     outDir: 'dist',
     platform: 'browser',
-    globalName: 'CipherHacks',
+    globalName: 'Mirage',
   },
 ]);
