@@ -49,6 +49,9 @@
     "@types/react": "^19.0.0",
     "@types/express": "^5.0.0"
   },
-  "files": ["dist"],
+  "bin": {
+    "cipherhacks": "./bin/init.mjs"
+  },
+  "files": ["dist", "bin"],
   "license": "MIT"
 }
