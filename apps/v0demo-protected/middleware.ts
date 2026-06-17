@@ -3,8 +3,8 @@ import { createCipherHacksMiddleware } from '@cipherhacks/shield/nextjs'
 export const middleware = createCipherHacksMiddleware({
   routes: {
     '/checkout*': 'maximum',
-    '/api/*': 'high',
-    '/admin*': 'high',
+    '/api/checkout*': 'maximum',
+    '/api/products*': 'high',
     '/*': 'standard',
   },
   onDetection: 'block',
@@ -18,5 +18,5 @@ export const middleware = createCipherHacksMiddleware({
 })
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|products/|.*\\.png$|.*\\.svg$|.*\\.jpg$).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|products/|admin|api/cipherhacks|blocked|.*\\.png$|.*\\.svg$|.*\\.jpg$).*)'],
 }
