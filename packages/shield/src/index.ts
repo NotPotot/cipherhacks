@@ -15,6 +15,7 @@ export { createAssessment, signal } from './shared/scoring';
 export { matchesBotPattern, KNOWN_BOT_USER_AGENTS } from './shared/patterns';
 export { createLogger } from './shared/logger';
 export { scoreRequest } from './server/fingerprint';
-export { detectBot } from './server/bot-detection';
+export { detectBot, analyzePayload } from './server/bot-detection';
 export { checkRateLimit, resetRateLimiter } from './server/rate-limiter';
+export { checkRepetition, getRepetitionFlags, resetRepetitionTracker } from './server/rate-limiter';
 export { generateCSPHeader } from './server/csp';

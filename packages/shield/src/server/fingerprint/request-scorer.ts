@@ -1,5 +1,6 @@
 import { detectBot } from '../bot-detection';
 import { checkRateLimit } from '../rate-limiter';
+import { checkRepetition } from '../rate-limiter/repetition-tracker';
 import { createAssessment } from '../../shared/scoring';
 import type {
   RequestInfo,
@@ -27,7 +28,7 @@ export function scoreRequest(
   request: RequestInfo,
   rateLimitConfig: RateLimitConfig,
   sensitivity: SensitivityLevel = 'standard'
-): { assessment: ThreatAssessment; rateLimited: boolean } {
+): { assessment: ThreatAssessment; rateLimited: boolean; slowdownMs: number } {
   const requestId = generateRequestId();
   const fingerprint = `${request.ip}|${request.userAgent.slice(0, 50)}`;
 
@@ -37,7 +38,16 @@ export function scoreRequest(
     rateLimitConfig
   );
 
-  const allSignals = [...botSignals, ...rateSignals];
+  const contentType = request.headers['content-type'] || '';
+  const { signals: repetitionSignals, slowdownMs } = checkRepetition(
+    fingerprint,
+    request.method,
+    request.url,
+    contentType,
+    request.body || ''
+  );
+
+  const allSignals = [...botSignals, ...rateSignals, ...repetitionSignals];
 
   const multiplier = getSensitivityMultiplier(sensitivity);
   const amplifiedSignals = allSignals.map((s) => ({
@@ -47,5 +57,5 @@ export function scoreRequest(
 
   const assessment = createAssessment(amplifiedSignals, requestId);
 
-  return { assessment, rateLimited: !allowed };
+  return { assessment, rateLimited: !allowed, slowdownMs };
 }

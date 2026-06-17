@@ -16,9 +16,9 @@ export function createCipherHacksMiddleware(
     const pathname = url.pathname;
 
     const sensitivity = matchRoute(pathname, config.routes);
-    const requestInfo = extractRequestInfo(request);
+    const requestInfo = await extractRequestInfo(request);
 
-    const { assessment, rateLimited } = scoreRequest(
+    const { assessment, rateLimited, slowdownMs } = scoreRequest(
       requestInfo,
       config.rateLimit,
       sensitivity
@@ -29,6 +29,7 @@ export function createCipherHacksMiddleware(
         score: assessment.score,
         action: assessment.action,
         signals: assessment.signals.length,
+        slowdownMs,
       });
     }
 
@@ -40,6 +41,14 @@ export function createCipherHacksMiddleware(
     if (assessment.action === 'block' && config.onDetection === 'block') {
       logger.threat(`Blocked: ${requestInfo.ip}`, assessment);
       return NextResponse.redirect(new URL(config.blockPage, request.url));
+    }
+
+    if (slowdownMs > 0) {
+      logger.warn(
+        `Slowing down ${requestInfo.ip} by ${slowdownMs}ms — repeated request pattern`,
+        { score: assessment.score }
+      );
+      await new Promise((resolve) => setTimeout(resolve, slowdownMs));
     }
 
     const response = NextResponse.next();
@@ -61,6 +70,10 @@ export function createCipherHacksMiddleware(
       response.headers.set('X-CipherHacks-Challenge', 'required');
     }
 
+    if (slowdownMs > 0) {
+      response.headers.set('X-CipherHacks-Slowdown', String(slowdownMs));
+    }
+
     return response;
   };
 }
@@ -79,11 +92,20 @@ function matchRoute(
   return routes['/*'] || 'standard';
 }
 
-function extractRequestInfo(request: Request): RequestInfo {
+async function extractRequestInfo(request: Request): Promise<RequestInfo> {
   const headers: Record<string, string> = {};
   request.headers.forEach((value, key) => {
     headers[key] = value;
   });
+
+  let body: string | undefined;
+  if (request.method === 'POST' || request.method === 'PUT' || request.method === 'PATCH') {
+    try {
+      const cloned = request.clone();
+      const text = await cloned.text();
+      body = text.slice(0, 2000);
+    } catch {}
+  }
 
   return {
     ip:
@@ -95,6 +117,7 @@ function extractRequestInfo(request: Request): RequestInfo {
     method: request.method,
     url: request.url,
     timestamp: Date.now(),
+    body,
   };
 }
 

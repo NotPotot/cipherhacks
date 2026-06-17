@@ -46,4 +46,5 @@ export interface RequestInfo {
   method: string;
   url: string;
   timestamp: number;
+  body?: string;
 }

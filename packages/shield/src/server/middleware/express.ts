@@ -32,7 +32,7 @@ export function cipherHacksExpress(
     const requestInfo = extractRequestInfo(req);
     const sensitivity = matchRoute(req.url, config.routes) || defaultSensitivity;
 
-    const { assessment, rateLimited } = scoreRequest(
+    const { assessment, rateLimited, slowdownMs } = scoreRequest(
       requestInfo,
       config.rateLimit,
       sensitivity
@@ -61,6 +61,16 @@ export function cipherHacksExpress(
       res.setHeader('X-CipherHacks-Challenge', 'required');
     }
 
+    if (slowdownMs > 0) {
+      logger.warn(
+        `Slowing down ${requestInfo.ip} by ${slowdownMs}ms — repeated request pattern`,
+        { score: assessment.score }
+      );
+      res.setHeader('X-CipherHacks-Slowdown', String(slowdownMs));
+      setTimeout(() => next(), slowdownMs);
+      return;
+    }
+
     next();
   };
 }
@@ -86,6 +96,12 @@ function extractRequestInfo(req: Req): RequestInfo {
     else if (Array.isArray(val)) headers[key] = val[0];
   }
 
+  let body: string | undefined;
+  if ((req as any).body) {
+    const raw = (req as any).body;
+    body = typeof raw === 'string' ? raw.slice(0, 2000) : JSON.stringify(raw).slice(0, 2000);
+  }
+
   const forwarded = req.get?.('x-forwarded-for');
   return {
     ip: forwarded?.split(',')[0]?.trim() || req.ip || '0.0.0.0',
@@ -94,6 +110,7 @@ function extractRequestInfo(req: Req): RequestInfo {
     method: req.method,
     url: req.url,
     timestamp: Date.now(),
+    body,
   };
 }
 
