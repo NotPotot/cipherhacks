@@ -4,7 +4,7 @@
 
 It works in two places at once — **server-side middleware** fingerprints every request and blocks threats before they reach your app, while **client-side JavaScript** actively defends sensitive form fields, detects headless browsers, and traps automated bots with honeypots.
 
-> **mirage-shield** is the core package at `packages/shield`. This monorepo also includes a protected demo app and an attack simulation suite for testing.
+> **@mirageshield/mirage** is the core package at `packages/shield`, published on npm. This monorepo also includes a protected demo app and an attack simulation suite for testing.
 
 ---
 
@@ -28,7 +28,7 @@ It works in two places at once — **server-side middleware** fingerprints every
 
 ```bash
 # Install in your project
-npm install mirage-shield
+npm install @mirageshield/mirage
 
 # Run the setup wizard
 npx mirage
@@ -40,7 +40,7 @@ The CLI detects your framework (Next.js, Express, or React) and generates the co
 
 ```ts
 // middleware.ts
-import { createMirageMiddleware } from 'mirage-shield/nextjs'
+import { createMirageMiddleware } from '@mirageshield/mirage/nextjs'
 
 export const middleware = createMirageMiddleware({
   onDetection: 'block',
@@ -55,7 +55,7 @@ export const config = {
 ### Express
 
 ```ts
-import { mirageExpress } from 'mirage-shield/express'
+import { mirageExpress } from '@mirageshield/mirage/express'
 
 app.use(mirageExpress({ onDetection: 'block' }))
 ```
@@ -65,7 +65,7 @@ app.use(mirageExpress({ onDetection: 'block' }))
 Wrap your app with `<MirageProvider>` to enable DOM shielding, honeypots, and headless detection:
 
 ```tsx
-import { MirageProvider } from 'mirage-shield/react'
+import { MirageProvider } from '@mirageshield/mirage/react'
 
 function App() {
   return (
@@ -163,7 +163,7 @@ Request → Next.js/Express Middleware
 
 | Package | Description |
 |---|---|
-| `mirage-shield` | Core shield library (server + client) |
+| `@mirageshield/mirage` | Core shield library (server + client) — [npm](https://www.npmjs.com/package/@mirageshield/mirage) |
 | `v0demo-protected` | Example Next.js app with Mirage Shield deployed |
 
 ---
