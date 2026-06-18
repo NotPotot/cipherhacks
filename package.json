@@ -1,6 +1,6 @@
 {
   "name": "@mirageshield/mirage",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "AI breach defense package - protect any website from AI-driven attacks. Works in Node.js, Next.js, Express, React, and any static HTML page via CDN.",
   "keywords": [
     "security",
@@ -75,7 +75,9 @@
     "attack": "npx tsx scripts/attack-sim.ts",
     "attack:vulnerable": "npx tsx scripts/attack-sim.ts --target vulnerable",
     "attack:protected": "npx tsx scripts/attack-sim.ts --target protected",
-    "prepublishOnly": "npm run build",
+    "verify:dist": "node -e \"const fs=require('fs');const req=['dist/index.js','dist/index.mjs','dist/index.d.ts','dist/nextjs.js','dist/express.js','dist/react.mjs','dist/browser.mjs','dist/client.global.js'];const missing=req.filter(f=>!fs.existsSync(f));if(missing.length){console.error('[verify:dist] Missing required build artifacts:\\n  '+missing.join('\\n  '));process.exit(1)}console.log('[verify:dist] OK ('+req.length+' artifacts)')\"",
+    "prepack": "npm run build && npm run verify:dist",
+    "prepublishOnly": "npm run build && npm run verify:dist",
     "postinstall": "node -e \"try{require('fs').existsSync(require('path').join(process.cwd(),'package.json'))&&console.log('\\n  [@mirageshield/mirage] Run \\x1b[1mnpx mirage\\x1b[0m to configure Mirage Shield\\n')}catch(e){}\""
   },
   "peerDependencies": {
