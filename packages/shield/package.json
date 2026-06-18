@@ -1,5 +1,5 @@
 {
-  "name": "@mirageshield/mirage",
+  "name": "mirage-shield",
   "version": "0.1.1",
   "description": "AI breach defense package — protect any website from AI-driven attacks",
   "main": "./dist/index.js",
@@ -34,7 +34,9 @@
   "scripts": {
     "build": "rm -rf dist && tsup",
     "dev": "tsup --watch",
-    "test": "echo \"no tests yet\""
+    "test": "echo \"no tests yet\"",
+    "setup": "node ./bin/init.mjs",
+    "postinstall": "node -e \"try{require('fs').existsSync(require('path').join(process.cwd(),'package.json'))&&console.log('\\n  🛡️  Run \\x1b[1mnpx mirage\\x1b[0m to configure mirage-shield\\n')}catch(e){}\""
   },
   "peerDependencies": {
     "next": ">=14",

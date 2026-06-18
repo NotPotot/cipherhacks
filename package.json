@@ -11,6 +11,8 @@
     "dev": "npx turbo run dev",
     "lint": "npx turbo run lint",
     "test": "npx turbo run test",
+    "setup": "pwsh scripts/install-shield.ps1",
+    "setup:demo": "pwsh scripts/install-shield.ps1 -TargetDir apps/v0demo-protected -Yes",
     "attack": "npx tsx scripts/attack-sim.ts",
     "attack:vulnerable": "npx tsx scripts/attack-sim.ts --target vulnerable",
     "attack:protected": "npx tsx scripts/attack-sim.ts --target protected"
