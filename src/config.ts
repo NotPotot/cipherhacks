@@ -8,8 +8,8 @@ export const DEFAULT_SHIELD_CONFIG: ShieldConfig = {
   blockPage: '/blocked',
   rateLimit: {
     windowMs: 60_000,
-    maxRequests: 60,
-    aiPatternMultiplier: 0.5,
+    maxRequests: 30,
+    aiPatternMultiplier: 0.3,
   },
   debug: false,
 };

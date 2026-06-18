@@ -18,7 +18,8 @@ function cleanupStore(windowMs: number) {
 
 export function checkRateLimit(
   fingerprint: string,
-  config: RateLimitConfig
+  config: RateLimitConfig,
+  botDetected: boolean = false
 ): { allowed: boolean; signals: Signal[] } {
   const now = Date.now();
   const signals: Signal[] = [];
@@ -45,13 +46,17 @@ export function checkRateLimit(
   record.timestamps.push(now);
 
   const count = record.timestamps.length;
-  if (count > config.maxRequests) {
+  const baseMax = botDetected
+    ? Math.ceil(config.maxRequests * config.aiPatternMultiplier)
+    : config.maxRequests;
+
+  if (count > baseMax) {
     signals.push(
       signal(
         'rate-limit-exceeded',
         25,
         1,
-        `${count} requests in ${config.windowMs}ms window (limit: ${config.maxRequests})`
+        `${count} requests in ${config.windowMs}ms window (limit: ${baseMax}${botDetected ? ', bot-adjusted' : ''})`
       )
     );
   }
@@ -71,8 +76,8 @@ export function checkRateLimit(
   }
 
   const effectiveMax = signals.length > 0
-    ? config.maxRequests * config.aiPatternMultiplier
-    : config.maxRequests;
+    ? Math.ceil(baseMax * config.aiPatternMultiplier)
+    : baseMax;
 
   return {
     allowed: count <= effectiveMax,

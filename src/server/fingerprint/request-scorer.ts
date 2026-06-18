@@ -33,9 +33,11 @@ export function scoreRequest(
   const fingerprint = `${request.ip}|${request.userAgent.slice(0, 50)}`;
 
   const botSignals = detectBot(request);
+  const botDetected = botSignals.length > 0;
   const { allowed, signals: rateSignals } = checkRateLimit(
     fingerprint,
-    rateLimitConfig
+    rateLimitConfig,
+    botDetected
   );
 
   const contentType = request.headers['content-type'] || '';

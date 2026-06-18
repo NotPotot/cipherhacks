@@ -30,5 +30,14 @@ export function analyzeUserAgent(userAgent: string): Signal[] {
     );
   }
 
+  if (
+    !botMatch &&
+    /\b(bot|crawler|spider|scraper|extractor|fetcher|archiver)\b/i.test(userAgent)
+  ) {
+    signals.push(
+      signal('generic-bot-ua', 35, 1, 'Generic bot keyword detected in UA string')
+    );
+  }
+
   return signals;
 }
