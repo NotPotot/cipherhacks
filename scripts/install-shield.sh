@@ -30,7 +30,7 @@ TARGET_DIR="${1:-$(pwd)}"
 
 echo -e "
 ${BOLD}+================================================+${RESET}
-${BOLD}|${RESET}  ${CYAN}${BOLD}mirage-shield${RESET} -- Install & Configure   ${BOLD}|${RESET}
+${BOLD}|${RESET}  ${CYAN}${BOLD}@mirageshield/mirage${RESET} -- Install & Configure  ${BOLD}|${RESET}
 ${BOLD}+================================================+${RESET}
 "
 
@@ -65,13 +65,13 @@ fi
 
 # --- Step 1: Install ---
 
-step 1 'Installing mirage-shield...'
+step 1 'Installing @mirageshield/mirage...'
 
-if grep -q '"mirage-shield"' "$PKG_PATH"; then
+if grep -q '"@mirageshield/mirage"' "$PKG_PATH" || grep -q '"mirage-shield"' "$PKG_PATH"; then
   done_msg 'Already installed'
 else
-  log "${DIM}$ npm install mirage-shield --save${RESET}"
-  (cd "$TARGET_DIR" && npm install mirage-shield --save --legacy-peer-deps 2>/dev/null) && done_msg 'Installed' || warn 'Auto-install failed. Run: npm install mirage-shield'
+  log "${DIM}$ npm install @mirageshield/mirage --save${RESET}"
+  (cd "$TARGET_DIR" && npm install @mirageshield/mirage --save --legacy-peer-deps 2>/dev/null) && done_msg 'Installed' || warn 'Auto-install failed. Run: npm install @mirageshield/mirage'
 fi
 
 # --- Step 2-4: Generate files ---
@@ -87,7 +87,7 @@ if [ "$FRAMEWORK" = "next" ]; then
     warn 'middleware.ts already exists -- skipping'
   else
     cat > "$MP" << 'EOF'
-import { createMirageMiddleware } from 'mirage-shield/nextjs'
+import { createMirageMiddleware } from '@mirageshield/mirage/nextjs'
 
 export const middleware = createMirageMiddleware({
   onDetection: 'block',
@@ -145,7 +145,7 @@ PAGEEOF
       mkdir -p "$(dirname "$EVP")"
       cat > "$EVP" << 'EVTEOF'
 import { NextResponse } from 'next/server'
-import { addEvent, getEvents, getEventsSince, getStats } from 'mirage-shield'
+import { addEvent, getEvents, getEventsSince, getStats } from '@mirageshield/mirage'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)

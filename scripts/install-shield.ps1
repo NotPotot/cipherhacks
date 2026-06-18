@@ -40,7 +40,7 @@ function Fail($msg) { Write-Host "`n${RED}[X] $msg${RESET}"; exit 1 }
 Write-Host @"
 
 ${BOLD}+================================================+${RESET}
-${BOLD}|${RESET}  ${CYAN}${BOLD}mirage-shield${RESET} -- Install & Configure   ${BOLD}|${RESET}
+${BOLD}|${RESET}  ${CYAN}${BOLD}@mirageshield/mirage${RESET} -- Install & Configure  ${BOLD}|${RESET}
 ${BOLD}+================================================+${RESET}
 "@
 
@@ -86,24 +86,24 @@ if (-not $Yes) {
 
 # --- Step 1: Install package ---
 
-Step 1 'Installing mirage-shield...'
+Step 1 'Installing @mirageshield/mirage...'
 
-$hasShield = $deps.Contains('mirage-shield')
+$hasShield = $deps.Contains('@mirageshield/mirage') -or $deps.Contains('mirage-shield')
 if ($hasShield) {
   Done 'Already installed'
 }
 else {
-  $installCmd = "npm install mirage-shield --save"
+  $installCmd = "npm install @mirageshield/mirage --save"
   Log "${DIM}$ $installCmd${RESET}"
   try {
     Push-Location -LiteralPath $TargetDir
-    npm install mirage-shield --save --legacy-peer-deps 2>&1 | Out-Null
+    npm install '@mirageshield/mirage' --save --legacy-peer-deps 2>&1 | Out-Null
     Pop-Location
     Done 'Installed'
   }
   catch {
     Pop-Location
-    Warn "Auto-install failed. Run manually: npm install mirage-shield"
+    Warn "Auto-install failed. Run manually: npm install @mirageshield/mirage"
   }
 }
 
@@ -121,7 +121,7 @@ if ($isNext) {
   }
   else {
 @"
-import { createMirageMiddleware } from 'mirage-shield/nextjs'
+import { createMirageMiddleware } from '@mirageshield/mirage/nextjs'
 
 export const middleware = createMirageMiddleware({
   onDetection: 'block',
@@ -186,7 +186,7 @@ export default function BlockedPage() {
       New-Item -ItemType Directory -Path $eventsDir -Force | Out-Null
 @"
 import { NextResponse } from 'next/server'
-import { addEvent, getEvents, getEventsSince, getStats } from 'mirage-shield'
+import { addEvent, getEvents, getEventsSince, getStats } from '@mirageshield/mirage'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -223,7 +223,7 @@ elseif ($hasReact) {
   }
   else {
 @"
-import { MirageProvider } from 'mirage-shield/react'
+import { MirageProvider } from '@mirageshield/mirage/react'
 import type { ReactNode } from 'react'
 
 export function MirageShield({ children }: { children: ReactNode }) {
@@ -317,7 +317,7 @@ if ($isExpress) {
   Step 5 'Express detected -- add this to your server file:'
   Write-Host @"
 
-  ${CYAN}const { mirageExpress } = require('mirage-shield/express')
+  ${CYAN}const { mirageExpress } = require('@mirageshield/mirage/express')
   app.use(mirageExpress({ onDetection: 'block' }))${RESET}
 "@
 }

@@ -1,21 +1,21 @@
-# mirage-shield
+# @mirageshield/mirage
 
 **AI breach defense for any website.** Block scrapers, bots, headless browsers, and AI-driven attacks with a single install.
 
-`mirage-shield` works in two layers at once:
+Mirage Shield works in two layers at once:
 
 - **Server-side middleware** (Next.js / Express) fingerprints every request, applies AI-aware rate limiting, and blocks threats before they reach your app.
 - **Client-side runtime** (React) masks sensitive form fields from headless scrapers, injects honeypots, detects automation frameworks, and tracks behavior to distinguish humans from bots.
 
-[![npm version](https://img.shields.io/npm/v/mirage-shield.svg)](https://www.npmjs.com/package/mirage-shield)
-[![license](https://img.shields.io/npm/l/mirage-shield.svg)](https://github.com/NotPotot/cipherhacks/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@mirageshield/mirage.svg)](https://www.npmjs.com/package/@mirageshield/mirage)
+[![license](https://img.shields.io/npm/l/@mirageshield/mirage.svg)](https://github.com/NotPotot/cipherhacks/blob/main/LICENSE)
 
 ---
 
 ## Install
 
 ```bash
-npm install mirage-shield
+npm install @mirageshield/mirage
 ```
 
 Then run the setup wizard from your project root:
@@ -51,7 +51,7 @@ The CLI auto-detects your framework (Next.js, Express, Hono, or plain React) and
 Create `middleware.ts` at your project root (or under `src/`):
 
 ```ts
-import { createMirageMiddleware } from 'mirage-shield/nextjs'
+import { createMirageMiddleware } from '@mirageshield/mirage/nextjs'
 
 export const middleware = createMirageMiddleware({
   onDetection: 'block',
@@ -67,7 +67,7 @@ export const config = {
 
 ```ts
 import express from 'express'
-import { mirageExpress } from 'mirage-shield/express'
+import { mirageExpress } from '@mirageshield/mirage/express'
 
 const app = express()
 
@@ -82,7 +82,7 @@ app.use(mirageExpress({
 Wrap your app with `<MirageProvider>` to enable DOM shielding, honeypots, headless detection, and behavior tracking:
 
 ```tsx
-import { MirageProvider } from 'mirage-shield/react'
+import { MirageProvider } from '@mirageshield/mirage/react'
 
 function App() {
   return (
@@ -108,7 +108,7 @@ Mark any input you want shielded from scrapers with `data-sensitive`:
 Drop the global client bundle into any page:
 
 ```html
-<script src="https://unpkg.com/mirage-shield/dist/client.global.js"></script>
+<script src="https://unpkg.com/@mirageshield/mirage/dist/client.global.js"></script>
 <script>
   window.Mirage.init({
     protectSelectors: ['[data-sensitive]', 'input[type="password"]'],
@@ -198,11 +198,11 @@ Request -> Next.js / Express middleware
 
 | Import | Use in |
 |---|---|
-| `mirage-shield` | Shared core (types, utilities) |
-| `mirage-shield/nextjs` | Next.js middleware helpers |
-| `mirage-shield/express` | Express middleware helpers |
-| `mirage-shield/react` | React provider and hooks |
-| `mirage-shield/client` | Global UMD bundle for plain HTML |
+| `@mirageshield/mirage` | Shared core (types, utilities) |
+| `@mirageshield/mirage/nextjs` | Next.js middleware helpers |
+| `@mirageshield/mirage/express` | Express middleware helpers |
+| `@mirageshield/mirage/react` | React provider and hooks |
+| `@mirageshield/mirage/client` | Global UMD bundle for plain HTML |
 
 ---
 
@@ -240,4 +240,4 @@ MIT
 
 - [GitHub repository](https://github.com/NotPotot/cipherhacks)
 - [Report an issue](https://github.com/NotPotot/cipherhacks/issues)
-- [npm package](https://www.npmjs.com/package/mirage-shield)
+- [npm package](https://www.npmjs.com/package/@mirageshield/mirage)

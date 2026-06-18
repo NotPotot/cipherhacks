@@ -22,7 +22,7 @@ function fail(msg) { console.error(`\n${RED}[X] ${msg}${RESET}`); process.exit(1
 
 console.log(`
 ${BOLD}+================================================+${RESET}
-${BOLD}|${RESET}  ${CYAN}${BOLD}mirage-shield${RESET} -- Install & Configure   ${BOLD}|${RESET}
+${BOLD}|${RESET}  ${CYAN}${BOLD}@mirageshield/mirage${RESET} -- Install & Configure  ${BOLD}|${RESET}
 ${BOLD}+================================================+${RESET}
 `)
 
@@ -58,9 +58,9 @@ log(`${DIM}Framework: ${framework}${RESET}`)
 
 // --- Step 1: Check package is installed ---
 
-step(1, 'Checking mirage-shield...')
+step(1, 'Checking @mirageshield/mirage...')
 
-const hasShield = deps['mirage-shield']
+const hasShield = deps['@mirageshield/mirage'] || deps['mirage-shield']
 if (hasShield) {
   done('Already installed')
 } else {
@@ -69,7 +69,7 @@ if (hasShield) {
     : 'npm'
 
   const legacyFlag = pm === 'npm' ? ' --legacy-peer-deps' : ''
-  const installCmd = pm === 'yarn' ? 'yarn add mirage-shield' : `${pm} install mirage-shield${legacyFlag}`
+  const installCmd = pm === 'yarn' ? 'yarn add @mirageshield/mirage' : `${pm} install @mirageshield/mirage${legacyFlag}`
   log(`${DIM}$ ${installCmd}${RESET}`)
 
   try {
@@ -91,7 +91,7 @@ if (isNext) {
   if (existsSync(middlewarePath)) {
     warn(`middleware.ts already exists -- skipping (add Mirage manually)`)
   } else {
-    const content = `import { createMirageMiddleware } from 'mirage-shield/nextjs'
+    const content = `import { createMirageMiddleware } from '@mirageshield/mirage/nextjs'
 
 export const middleware = createMirageMiddleware({
   onDetection: 'block',
@@ -138,7 +138,7 @@ export const config = {
     } else {
       mkdirSync(eventsDir, { recursive: true })
       const eventsRoute = `import { NextResponse } from 'next/server'
-import { addEvent, getEvents, getEventsSince, getStats } from 'mirage-shield'
+import { addEvent, getEvents, getEventsSince, getStats } from '@mirageshield/mirage'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -176,7 +176,7 @@ if (!isNext && hasReact) {
   if (existsSync(wrapperPath)) {
     warn('MirageShield.tsx already exists -- skipping')
   } else {
-    const wrapper = `import { MirageProvider } from 'mirage-shield/react'
+    const wrapper = `import { MirageProvider } from '@mirageshield/mirage/react'
 import type { ReactNode } from 'react'
 
 export function MirageShield({ children }: { children: ReactNode }) {
@@ -277,7 +277,7 @@ export function MirageShield({ children }: { children: ReactNode }) {
 if (isExpress) {
   step(isNext ? 5 : 3, 'Express detected -- add this to your server file:')
   console.log(`
-  ${CYAN}const { mirageExpress } = require('mirage-shield/express')
+  ${CYAN}const { mirageExpress } = require('@mirageshield/mirage/express')
   app.use(mirageExpress({ onDetection: 'block' }))${RESET}
 `)
 }
@@ -286,7 +286,7 @@ if (isHono && !isNext) {
   step(5, 'Hono backend detected -- add middleware to your Hono server:')
   console.log(`
   ${CYAN}// In your Hono server file:
-  import { mirageExpress } from 'mirage-shield/express'
+  import { mirageExpress } from '@mirageshield/mirage/express'
 
   // Hono can use Express-style middleware via adapter,
   // or check requests manually:
